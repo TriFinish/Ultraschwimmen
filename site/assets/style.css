@@ -32,11 +32,12 @@ body {
   position: relative;
   width: 100%;
   min-height: 100vh;
+  min-height: 100svh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3rem 1.25rem 2rem;
+  padding: 3rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
 }
 
 .waves {
@@ -44,11 +45,13 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 22vh;
-  min-height: 110px;
-  max-height: 200px;
+  height: 20vh;
+  min-height: 90px;
+  max-height: 170px;
   z-index: 0;
   pointer-events: none;
+  -webkit-mask-image: linear-gradient(to top, #000 45%, transparent);
+  mask-image: linear-gradient(to top, #000 45%, transparent);
 }
 
 .waves-svg {
