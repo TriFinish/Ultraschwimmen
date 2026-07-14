@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ultraschwimmen</title>
+  <meta name="description" content="Alle Links rund um Ultraschwimmen an einem Ort." />
+
+  <meta property="og:title" content="Ultraschwimmen" />
+  <meta property="og:description" content="Alle Links rund um Ultraschwimmen an einem Ort." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#f2f9fd" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+</head>
+<body>
+  <div class="scene">
+    <div class="waves" aria-hidden="true">
+      <svg class="waves-svg" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="wave-path" d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="wave-parallax">
+          <use href="#wave-path" x="48" y="0" />
+          <use href="#wave-path" x="48" y="3" />
+          <use href="#wave-path" x="48" y="5" />
+          <use href="#wave-path" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+
+    <main class="card" id="app" aria-live="polite">
+      <div class="loading">Lädt…</div>
+    </main>
+  </div>
+
+  <template id="profile-template">
+    <div class="profile">
+      <img class="logo" src="assets/logo.svg" alt="" />
+      <h1 class="sr-only"></h1>
+      <p class="subtitle"></p>
+    </div>
+  </template>
+
+  <template id="link-template">
+    <a class="link-btn" target="_blank" rel="noopener noreferrer">
+      <span class="link-icon" aria-hidden="true"></span>
+      <span class="link-label"></span>
+      <span class="link-arrow" aria-hidden="true">→</span>
+    </a>
+  </template>
+
+  <template id="footer-link-template">
+    <a class="footer-link" target="_blank" rel="noopener noreferrer">
+      <span class="link-icon" aria-hidden="true"></span>
+      <span></span>
+    </a>
+  </template>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

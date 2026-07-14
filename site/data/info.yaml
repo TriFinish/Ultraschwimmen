@@ -1,0 +1,29 @@
+profile:
+  title: Ultraschwimmen
+  description: Alle Links rund um Ultraschwimmen an einem Ort.
+  subtitle: Organisiert vom Verein TriFinish
+
+links:
+  - label: Jetzt anmelden
+    url: https://my.raceresult.com/383076/registration
+    icon: register
+    highlight: true
+  - label: Website
+    url: https://ultraschwimmen.de
+    icon: website
+  - label: Instagram
+    url: https://www.instagram.com/ultraschwimmen
+    icon: instagram
+  - label: WhatsApp-Kanal
+    url: https://whatsapp.com/channel/0029VbDjErvFHWpxwKOYaK3f
+    icon: whatsapp
+
+footer:
+  note: Ultraschwimmen ist ein Event des Vereins TriFinish
+  links:
+    - label: TriFinish Website
+      url: https://www.trifinish.eu
+      icon: website
+    - label: TriFinish Instagram
+      url: https://www.instagram.com/trifinishmuenster
+      icon: instagram
