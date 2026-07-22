@@ -101,6 +101,17 @@ function applyMeta(profile) {
   }
 }
 
+// Builds one link anchor from a <template>. `labelSelector` targets the element
+// that receives the link text; `eventName` is the Umami event to track on click.
+function makeLink(templateId, link, { iconSize, labelSelector, eventName }) {
+  const node = document.getElementById(templateId).content.firstElementChild.cloneNode(true);
+  node.href = link.url;
+  node.setAttribute('data-umami-event', eventName);
+  node.querySelector('.link-icon').appendChild(makeIcon(link.icon, iconSize));
+  node.querySelector(labelSelector).textContent = link.label;
+  return node;
+}
+
 function renderLinks(data) {
   applyMeta(data.profile);
 
@@ -119,21 +130,20 @@ function renderLinks(data) {
   }
   app.appendChild(profile);
 
-  const linkTemplate = document.getElementById('link-template');
   const list = document.createElement('div');
   list.className = 'links';
   for (const link of data.links ?? []) {
-    const node = linkTemplate.content.firstElementChild.cloneNode(true);
-    node.href = link.url;
+    const node = makeLink('link-template', link, {
+      iconSize: 22,
+      labelSelector: '.link-label',
+      eventName: link.label,
+    });
     if (link.highlight) node.classList.add('highlight');
-    node.querySelector('.link-icon').appendChild(makeIcon(link.icon, 22));
-    node.querySelector('.link-label').textContent = link.label;
     list.appendChild(node);
   }
   app.appendChild(list);
 
   if (data.footer) {
-    const footerTemplate = document.getElementById('footer-link-template');
     const footer = document.createElement('div');
     footer.className = 'footer';
     if (data.footer.note) {
@@ -145,11 +155,13 @@ function renderLinks(data) {
     const footerLinks = document.createElement('div');
     footerLinks.className = 'footer-links';
     for (const link of data.footer.links ?? []) {
-      const node = footerTemplate.content.firstElementChild.cloneNode(true);
-      node.href = link.url;
-      node.querySelector('.link-icon').appendChild(makeIcon(link.icon, 16));
-      node.querySelector('span:last-child').textContent = link.label;
-      footerLinks.appendChild(node);
+      footerLinks.appendChild(
+        makeLink('footer-link-template', link, {
+          iconSize: 16,
+          labelSelector: 'span:last-child',
+          eventName: `Footer: ${link.label}`,
+        }),
+      );
     }
     footer.appendChild(footerLinks);
     app.appendChild(footer);
