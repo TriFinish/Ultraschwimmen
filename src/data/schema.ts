@@ -224,9 +224,10 @@ export const siteSchema = z.object({
             height: z.number().int().positive(),
             url: z.string().url().optional(),
             role: z.string().optional(),
-            // Dasselbe Motiv in höherer Auflösung, für scharfe Darstellung auf
-            // Retina-Displays. Optional: Ein SVG braucht das nicht.
-            logo_2x: z.string().startsWith('/').optional(),
+            // Ein bis zwei Sätze für /sponsoren/. Im Band unter jeder Seite
+            // steht nur das Logo — wer wissen will, was ein Name mit dem
+            // Wettkampf zu tun hat, findet die Antwort auf der eigenen Seite.
+            description: z.string().optional(),
             // Erscheint zusätzlich im Seitenkopf. Kein zweiter Datenort für
             // denselben Sponsor — nur eine Markierung an dem, der schon da ist.
             header: z.boolean().optional(),

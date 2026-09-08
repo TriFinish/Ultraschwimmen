@@ -1,0 +1,175 @@
+---
+// Die Sponsoren mit Namen, Rolle und einem Satz dazu — für /sponsoren/.
+//
+// Das Band unter jeder Seite (SponsorBand) zeigt bewusst nur Logos: Es soll
+// nicht vom Inhalt ablenken. Wer wissen will, wer diese Namen sind und was sie
+// mit dem Wettkampf zu tun haben, findet es hier. Beide lesen dieselbe Liste
+// aus site.yaml, damit ein neuer Sponsor an einer Stelle gepflegt wird.
+//
+// Kein Card: Eine Karte, die als Ganzes verlinkt ist, verträgt keinen zweiten
+// Link darin — und hier gehört der Link ans Ende des Textes, nicht um alles
+// herum. Sponsoren ohne `url` (Power Sports hat noch keine hinterlegt) sollen
+// außerdem gar keinen Link erzeugen und nicht wie ein toter Klick aussehen.
+
+import type { SiteData } from '../../data/schema';
+
+type Sponsor = NonNullable<SiteData['sponsors']>['items'][number];
+
+interface Props {
+  sponsors: Sponsor[];
+  /** Überschriftenebene der Sponsornamen. Die Seite trägt bereits ein h1. */
+  level?: 2 | 3;
+}
+
+const { sponsors, level = 2 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+---
+
+<ul class="sponsoren">
+  {
+    sponsors.map((sponsor) => (
+      <li class="sponsor">
+        {/* Auf hellem Grund mit Rahmen: Die Logos bringen sehr unterschiedliche
+            Hintergründe mit — ein schwarzes Wortbild neben einem farbigen
+            steht sonst haltlos im Weiß. */}
+        <div class="sponsor-plakette">
+          <img
+            class="sponsor-logo"
+            src={sponsor.logo}
+            alt={sponsor.name}
+            width={sponsor.width}
+            height={sponsor.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <div class="sponsor-text">
+          {sponsor.role && <p class="sponsor-rolle">{sponsor.role}</p>}
+          <Heading class="sponsor-name">{sponsor.name}</Heading>
+          {sponsor.description && <p class="sponsor-beschreibung">{sponsor.description}</p>}
+          {sponsor.url && (
+            <a
+              class="sponsor-link"
+              href={sponsor.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-umami-event={`Sponsor-Website: ${sponsor.name}`}
+            >
+              Zur Website
+              <span aria-hidden="true"> →</span>
+            </a>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .sponsoren {
+    display: grid;
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sponsor {
+    display: grid;
+    gap: 1rem;
+    padding: 1.15rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: 0 1px 2px rgb(11 31 51 / 4%);
+  }
+
+  /* Ab Tablet steht das Logo neben dem Text. Die Spalte ist fest, damit die
+     Logos untereinander auf einer Kante stehen — unterschiedlich breite
+     Plaketten läsen sich wie unterschiedlich wichtige Sponsoren. */
+  @media (min-width: 40rem) {
+    .sponsor {
+      grid-template-columns: 14rem 1fr;
+      align-items: start;
+      gap: 1.5rem;
+    }
+  }
+
+  .sponsor-plakette {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Feste Höhe für alle: Ein hohes und ein flaches Logo bekommen damit
+       gleich viel Fläche, statt dass das flachere kleiner wirkt. */
+    min-height: 5.5rem;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface-sunk);
+  }
+
+  /* `height: auto` ist hier nicht optional, sondern der ganze Punkt: Das
+     <img> trägt width/height als Attribut (nötig, damit beim Laden nichts
+     springt), und die wirken wie eine CSS-Regel. Ohne `height: auto` blieb
+     also die Höhe auf 125 px stehen, `max-height` klemmte sie auf 56 und
+     `max-width` unabhängig davon die Breite auf 190 — zwei Achsen, zwei
+     getrennte Grenzen, Seitenverhältnis dahin. Das EFTAS-Logo stand dadurch
+     33 % zu hoch im Kasten. `object-fit: contain` ist der Gurt zum
+     Hosenträger, falls die Kiste doch einmal ein anderes Format bekommt. */
+  .sponsor-logo {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 3.5rem;
+    object-fit: contain;
+  }
+
+  .sponsor-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .sponsor-rolle {
+    margin: 0;
+    color: var(--accent-deep);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .sponsor-name {
+    margin: 0;
+    font-size: var(--step-1);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  .sponsor-beschreibung {
+    margin: 0;
+    max-width: var(--measure);
+    color: var(--ink-soft);
+  }
+
+  .sponsor-link {
+    margin-top: 0.35rem;
+    align-self: start;
+    color: var(--accent-deep);
+    font-size: var(--step--1);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .sponsor-link:hover {
+    text-decoration: underline;
+  }
+
+  .sponsor-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+</style>

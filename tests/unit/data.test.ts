@@ -1,11 +1,31 @@
 // Prüft die Daten und die reine Logik — offline, in Millisekunden.
 
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { eventDataSchema } from '../../src/data/schema.js';
-import { loadEvent } from '../../src/data/load.js';
+import { loadEvent, loadSite } from '../../src/data/load.js';
 import { formatEuro, formatRemaining, labelMatchesDeadline } from '../../src/scripts/format.js';
 
 const data = loadEvent();
+
+/** Die echten Maße einer Bilddatei aus public/ — PNG aus dem IHDR, SVG aus dem Tag. */
+function masse(pfad: string): { width: number; height: number } {
+  const datei = join(process.cwd(), 'public', pfad.replace(/^\//, ''));
+
+  if (pfad.endsWith('.svg')) {
+    const svg = readFileSync(datei, 'utf8').slice(0, 2000);
+    const box = svg.match(/viewBox="[\d.\s]*?([\d.]+)[\s,]+([\d.]+)"/);
+    if (box) return { width: Math.round(Number(box[1])), height: Math.round(Number(box[2])) };
+    const w = svg.match(/\swidth="([\d.]+)/);
+    const h = svg.match(/\sheight="([\d.]+)/);
+    return { width: Math.round(Number(w?.[1])), height: Math.round(Number(h?.[1])) };
+  }
+
+  // PNG: Breite und Höhe stehen als 32-Bit-Zahlen ab Byte 16 im IHDR-Block.
+  const buf = readFileSync(datei);
+  return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
+}
 
 describe('event.yaml', () => {
   it('erfüllt das Schema', () => {
@@ -95,5 +115,29 @@ describe('labelMatchesDeadline', () => {
     expect(labelMatchesDeadline(new Date('2026-08-27T21:00:00Z'), '27.08.2026 · 23:00 Uhr')).toBe(
       true,
     );
+  });
+});
+
+describe('site.yaml — Sponsorlogos', () => {
+  const sponsoren = loadSite().sponsors?.items ?? [];
+
+  it('nennt für jedes Logo die echten Maße der Datei', () => {
+    // Diese Zahlen sind kein Beiwerk: Sie reservieren den Platz, bevor das Bild
+    // da ist, UND sie legen das Seitenverhältnis fest, mit dem der Browser
+    // rechnet. Bei DERMASENCE stand 460x91 statt 460x94 — das Band zuckte beim
+    // Laden, und in einem Kasten mit Höhen- UND Breitengrenze zieht sich das
+    // Logo auf ein falsches Format. Von Hand sieht man den Unterschied nicht.
+    for (const s of sponsoren) {
+      expect(masse(s.logo), `${s.name} (${s.logo})`).toEqual({
+        width: s.width,
+        height: s.height,
+      });
+    }
+  });
+
+  it('führt genau einen Sponsor im Kopfbereich', () => {
+    // SiteHeader nimmt den ersten Treffer. Wären es zwei, entschiede die
+    // Reihenfolge in der Datei still darüber, wer oben steht.
+    expect(sponsoren.filter((s) => s.header)).toHaveLength(1);
   });
 });

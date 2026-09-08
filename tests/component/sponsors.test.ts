@@ -2,8 +2,9 @@
 
 import { describe, expect, it } from 'vitest';
 import SponsorBand from '../../src/components/layout/SponsorBand.astro';
+import SponsorList from '../../src/components/content/SponsorList.astro';
 import SiteHeader from '../../src/components/layout/SiteHeader.astro';
-import { render } from './render.js';
+import { render, texts } from './render.js';
 import { resolveNav } from '../../src/lib/nav.js';
 import { loadSite } from '../../src/data/load.js';
 
@@ -40,6 +41,55 @@ describe('SponsorBand', () => {
     const el = await render(SponsorBand, { sponsors: ohneUrl });
     expect(el.querySelectorAll('a')).toHaveLength(0);
     expect(el.querySelectorAll('img')).toHaveLength(1);
+  });
+});
+
+describe('SponsorList', () => {
+  const sponsoren = site.sponsors?.items ?? [];
+
+  it('führt jeden Sponsor aus site.yaml genau einmal auf', async () => {
+    // Dieselbe Quelle wie das Band. Fällt das auseinander, steht ein Sponsor
+    // unter der Seite, aber nicht auf der Seite, die ihn erklären soll.
+    const el = await render(SponsorList, { sponsors: sponsoren });
+    expect(el.querySelectorAll('li')).toHaveLength(sponsoren.length);
+    expect(texts(el, '.sponsor-name')).toEqual(sponsoren.map((s) => s.name));
+  });
+
+  it('beschriftet jedes Logo mit dem Namen', async () => {
+    const el = await render(SponsorList, { sponsors: sponsoren });
+    const alts = [...el.querySelectorAll('img')].map((i) => i.getAttribute('alt'));
+    expect(alts).toEqual(sponsoren.map((s) => s.name));
+  });
+
+  it('erzeugt für einen Sponsor ohne url keinen Link', async () => {
+    // Power Sports hat (noch) keine Adresse hinterlegt. Ein „Zur Website",
+    // das nirgendwohin führt, wäre schlimmer als keines.
+    const el = await render(SponsorList, {
+      sponsors: [{ name: 'Ohne Website', logo: '/x.svg', width: 10, height: 10 }],
+    });
+    expect(el.querySelectorAll('a')).toHaveLength(0);
+    expect(el.querySelectorAll('img')).toHaveLength(1);
+  });
+
+  it('öffnet fremde Seiten nur mit noopener', async () => {
+    const el = await render(SponsorList, { sponsors: sponsoren });
+    for (const a of el.querySelectorAll('a[target="_blank"]')) {
+      expect(a.getAttribute('href')).toMatch(/^https?:/);
+      expect(a.getAttribute('rel') ?? '').toContain('noopener');
+    }
+  });
+
+  it('nimmt die Überschriftenebene als Prop — die Seite trägt schon ein h1', async () => {
+    const el = await render(SponsorList, { sponsors: sponsoren, level: 3 });
+    expect(el.querySelectorAll('h3')).toHaveLength(sponsoren.length);
+    expect(el.querySelector('h2')).toBeNull();
+  });
+
+  it('lässt die Beschreibung weg, wenn keine gepflegt ist', async () => {
+    const el = await render(SponsorList, {
+      sponsors: [{ name: 'Knapp', logo: '/x.svg', width: 10, height: 10 }],
+    });
+    expect(el.querySelector('.sponsor-beschreibung')).toBeNull();
   });
 });
 

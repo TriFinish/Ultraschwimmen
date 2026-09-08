@@ -27,10 +27,16 @@ interface Props {
 
 const { siteName, tagline, items, logo, isHome = false, sponsor } = Astro.props;
 
-// Die zweite Auflösung kommt aus site.yaml — welche Datei das ist, geht diese
-// Komponente nichts an.
-const sponsorSrcset =
-  sponsor?.logo_2x ? `${sponsor.logo} 1x, ${sponsor.logo_2x} 2x` : undefined;
+// Kein srcset mehr. Hier stand `logo_long.png 1x, Webseite_…_1600px.png 2x` —
+// aber das sind zwei VERSCHIEDENE Fassungen des Logos, keine zwei Auflösungen
+// derselben: die eine einzeilig (634×125), die andere mit „powered by:"
+// darüber gestapelt (1404×421). Der Browser hat auf Retina-Geräten also die
+// gestapelte Fassung geladen und wegen `width: auto` in deren Seitenverhältnis
+// gezeichnet — 67×20 px, in denen weder Schrift noch Marke zu erkennen waren.
+// Wer kein Retina-Display hatte, sah ein anderes Logo.
+//
+// Nötig ist das ohnehin nicht: `logo_long.png` bringt 634 px Breite mit und
+// deckt die Kopfgröße auch auf einem 3×-Display noch ab.
 ---
 
 <header class="site-header">
@@ -63,7 +69,6 @@ const sponsorSrcset =
               <img
                 class="header-sponsor-logo"
                 src={sponsor.logo}
-                srcset={sponsorSrcset}
                 alt={sponsor.name}
                 width={sponsor.width}
                 height={sponsor.height}
@@ -74,7 +79,6 @@ const sponsorSrcset =
             <img
               class="header-sponsor-logo"
               src={sponsor.logo}
-              srcset={sponsorSrcset}
               alt={sponsor.name}
               width={sponsor.width}
               height={sponsor.height}

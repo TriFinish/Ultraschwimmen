@@ -42,6 +42,9 @@ nav:
   - label: Fotos
     href: /fotos/
     icon: lucide:image
+  - label: Sponsoren
+    href: /sponsoren/
+    icon: lucide:handshake
   - label: Kontakt
     href: /kontakt/
     icon: lucide:mail
@@ -75,23 +78,35 @@ organizer:
 # Erscheinen als Band über dem Fußbereich. Auf der alten Seite war das ein
 # einziges, fest zusammengesetztes Bild — mit unlesbarem Text auf dem Handy und
 # ohne Links. Einzelne Logos lassen sich verlinken und beschriften.
+# Reihenfolge = Reihenfolge im Band unter jeder Seite UND auf /sponsoren/.
+# `description` erscheint nur auf der Seite, das Band zeigt weiterhin nur Logo
+# und Rolle.
 sponsors:
   headline: Unterstützt von
   items:
     - name: EFTAS Fernerkundung Technologietransfer GmbH
       role: Hauptsponsor
       logo: /sponsors/eftas/logo_long.png
-      # Dieselbe Grafik in 1404x421 — die Quelle, aus der logo_long.png stammt.
-      logo_2x: /sponsors/eftas/Webseite_Sponsoren-Fusszeile_1600px_final.png
       width: 634
       height: 125
       url: https://www.eftas.com/
       header: true
+      description: Hauptsponsor des Ultraschwimmens. EFTAS arbeitet mit Fernerkundung und Geodaten — mit Daten von Land und Wasser also, was für einen Wettkampf im Hafenbecken besser passt als den meisten Sponsorings nachgesagt wird.
     - name: DERMASENCE
+      role: Sponsor
       logo: /sponsors/dermasence/logo.svg
+      # 460x94 laut SVG. Stand vorher auf 91 — das reservierte beim Laden einen
+      # etwas zu flachen Kasten, und das Band zuckte, wenn das Logo ankam.
       width: 460
-      height: 91
+      height: 94
       url: https://www.dermasence.de/
+      description: DERMASENCE steht für medizinische Hautpflege und unterstützt das Ultraschwimmen. Nach mehreren Stunden im Freigewässer ist das kein abwegiges Thema — siehe den Hinweis zu Zerkarien in der Ausschreibung.
+    - name: Power Sports Münster
+      role: Partner vor Ort
+      logo: /sponsors/powersports/logo.svg
+      width: 198
+      height: 62
+      description: Stellt uns das Gelände am Hafenkai zur Verfügung. Hier stehen die Zelte, hier ist die Startunterlagenausgabe, und hier gehen alle ins Wasser und wieder heraus. Ohne diese Fläche gäbe es den Wettkampf an dieser Stelle nicht.
 
 footer:
   note: Ultraschwimmen ist eine Veranstaltung des Tri Finish Münster e.V.

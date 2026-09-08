@@ -82,10 +82,60 @@ const { columns, rows, caption } = Astro.props;
   .table tbody th {
     font-size: var(--step-1);
     font-weight: 700;
+    white-space: normal;
   }
 
   .table tbody tr:last-child th,
   .table tbody tr:last-child td {
     border-bottom: 0;
+  }
+
+  /* Auf dem Handy bricht die Tabelle um, statt seitwärts zu laufen.
+     Vierspaltig kam sie auf der Startseite auf rund 470 px und musste
+     geschoben werden — bei einer Preistabelle heißt das, dass der Preis nicht
+     im Bild ist, während man die Strecke liest.
+     Die Breite bestimmen zwei unteilbare Wörter, „Flossenschwimmen" und
+     „Meldegebühr". Mit Silbentrennung (`lang="de"` steht in Base.astro) darf
+     der Browser sie brechen und die Tabelle passt.
+     Nur die Beschriftungen: Die Werte selbst bleiben oben auf `nowrap`, damit
+     „10:00 Uhr" und „47 €" nicht auseinandergerissen werden. */
+  @media (max-width: 34rem) {
+    .table th,
+    .table td {
+      padding-right: 0.4rem;
+    }
+
+    /* Nur die Spaltenköpfe werden getrennt: „Meldegebühr" ist ein Wort und
+       ginge sonst nicht unter 105 px. `hyphenate-limit-chars` hält kurze
+       Wörter davon fern — ohne die Regel trennt der Browser auch „Run-den",
+       was mehr stört als es hilft. Browser ohne Unterstützung dafür trennen
+       etwas großzügiger; kaputt ist dort nichts. */
+    .table thead th {
+      white-space: normal;
+      overflow-wrap: break-word;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+      hyphenate-limit-chars: 10 4 4;
+      /* Die Sperrung der Versalien kostet hier gut vier Pixel, die der
+         Streckenspalte fehlen. Auf Lesbarkeit wirkt sich das bei fünf bis
+         sieben Zeichen nicht aus. */
+      letter-spacing: 0.02em;
+    }
+
+    /* Die Streckenbezeichnung bricht dagegen nur an ihrem Leerzeichen —
+       „2 km" über „Flossenschwimmen", so wie es auch in der Ausschreibung
+       steht. Ein getrenntes „Flossen-schwimmen" wäre drei Zeilen hoch und
+       läse sich wie ein anderer Wettbewerb. */
+    .table tbody th {
+      /* Gleitend statt in Stufen: „Flossenschwimmen" ist das breiteste
+         unteilbare Wort der Tabelle und bestimmt allein, ab wann sie nicht
+         mehr passt. Mit clamp schrumpft die Beschriftung genau so weit mit,
+         wie das Gerät schmaler wird — 16 px auf dem großen Telefon, 14 px als
+         Untergrenze. Eine feste Stufe hätte entweder auf 390 px Platz
+         verschenkt oder auf 360 px nicht gereicht. */
+      font-size: clamp(0.875rem, 0.35rem + 2.4vw, 1rem);
+      -webkit-hyphens: manual;
+      hyphens: manual;
+    }
   }
 </style>

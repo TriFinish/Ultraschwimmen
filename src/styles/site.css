@@ -140,9 +140,34 @@
   outline-offset: 3px;
 }
 
+/* Gleitend über die Telefonbreiten. Die Kopfzeile teilt sich in drei feste
+   Posten — Wortmarke, Beisatz, Sponsorlogo — und das Logo darf als einziges
+   nicht schrumpfen. Bei fester Höhe hieß das: Es blieb so klein, dass daneben
+   noch alles danebenpasste. Umgekehrt herum ist es richtig, der Hauptsponsor
+   bekommt den Platz und der Rest gibt ihn her. */
 .header-sponsor-logo {
   width: auto;
-  height: 1.25rem;
+  height: clamp(1.25rem, -3.25rem + 20vw, 2.25rem);
+}
+
+/* Was der Sponsor gewinnt, geben Beisatz und Wortmarke auf dem Telefon her:
+   Der Beisatz verschwindet, die Wortmarke rückt eine Stufe herunter. Beides
+   wiederholt nur, was zwei Zeilen weiter unten ohnehin groß auf der Seite
+   steht — das Sponsorlogo steht nirgendwo sonst im Bild. */
+@media (max-width: 33.999rem) {
+  .brand-tagline {
+    display: none;
+  }
+
+  .brand-name {
+    font-size: var(--step-0);
+  }
+}
+
+@media (min-width: 34rem) {
+  .header-sponsor-logo {
+    height: 2.25rem;
+  }
 }
 
 /* ------------------------------------------------------------ Navigation */
@@ -612,7 +637,7 @@
   }
 
   .header-sponsor-logo {
-    height: 1.75rem;
+    height: 2.5rem;
   }
 
   .nav-item.is-group {

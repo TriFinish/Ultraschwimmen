@@ -21,14 +21,13 @@ const { distances, withPrice = false, caption } = Astro.props;
 
 const columns = ['Strecke', 'Runden', 'Start', ...(withPrice ? ['Meldegebühr'] : [])];
 
+// Die Startzeit ohne „Uhr": Unter einer Spalte namens „Start" steht es
+// siebenmal untereinander, ohne einmal etwas zu klären — und es waren genau
+// die 28 px, die die vierspaltige Tabelle auf dem Handy über den Rand
+// geschoben haben. Im Fließtext des Zeitplans steht „Uhr" weiterhin.
 const rows: Cell[][] = [...distances]
   .sort((a, b) => b.laps - a.laps)
-  .map((d) => [
-    d.label,
-    d.laps,
-    `${d.start} Uhr`,
-    ...(withPrice ? [formatEuro(d.price)] : []),
-  ]);
+  .map((d) => [d.label, d.laps, d.start, ...(withPrice ? [formatEuro(d.price)] : [])]);
 ---
 
 <DataTable columns={columns} rows={rows} caption={caption} />

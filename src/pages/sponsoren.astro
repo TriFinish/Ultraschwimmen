@@ -1,0 +1,45 @@
+---
+// Sponsoren und Partner.
+//
+// Bis hierher gab es die Namen nur als Logoband unter jeder Seite — ohne
+// Erklärung, was der jeweilige Name mit dem Wettkampf zu tun hat. Diese Seite
+// ist der Ort dafür; das Band bleibt, wie es ist, und verlinkt nichts.
+//
+// Die Liste kommt aus site.yaml, nicht aus dieser Datei: Ein neuer Sponsor
+// erscheint dann automatisch hier UND im Band, statt an zwei Stellen gepflegt
+// zu werden.
+
+import Page from '../layouts/Page.astro';
+import Prose from '../components/ui/Prose.astro';
+import Section from '../components/ui/Section.astro';
+import SponsorList from '../components/content/SponsorList.astro';
+import { loadEvent, loadSite } from '../data/load';
+
+const site = loadSite();
+const { event, venue } = loadEvent();
+
+const sponsoren = site.sponsors?.items ?? [];
+
+const mailto = `mailto:${site.contact.email}?subject=${encodeURIComponent(
+  `Sponsoring ${event.title}`,
+)}`;
+---
+
+<Page
+  title="Sponsoren"
+  description={`Wer das ${event.title} möglich macht: Sponsoren und Partner der Veranstaltung im ${venue.name}.`}
+  heading="Sponsoren und Partner"
+  lead="Ein Freiwasserwettkampf braucht mehr als Wasser. Diese Unternehmen tragen das Ultraschwimmen mit — mit Geld, mit Material und mit dem Gelände, auf dem alles steht."
+>
+  {sponsoren.length > 0 && <SponsorList sponsors={sponsoren} />}
+
+  <Section title="Selbst unterstützen?">
+    <Prose>
+      <p>
+        Das Ultraschwimmen wird vom {site.organizer.name} ehrenamtlich organisiert. Wer dabei
+        helfen möchte — als Sponsor, mit Material oder mit einer Hand am Wettkampftag —, schreibt
+        uns am besten eine Mail an <a href={mailto}>{site.contact.email}</a>.
+      </p>
+    </Prose>
+  </Section>
+</Page>
