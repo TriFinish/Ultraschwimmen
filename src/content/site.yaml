@@ -14,14 +14,20 @@ site:
 nav:
   - label: Wettkampf
     children:
-      # `mobile: true` = erscheint zusätzlich in der Daumenleiste am unteren
-      # Rand. Höchstens drei; mehr passt neben „Start" und „Mehr" nicht.
+      # `mobile: true` = erscheint zusätzlich als Reiter in der Daumenleiste am
+      # unteren Rand. Höchstens drei; mehr passt neben „Start" und „Mehr" nicht.
+      #
+      # `icon` braucht dagegen JEDER Eintrag: Was nicht Reiter ist, landet unter
+      # „Mehr", und dort steht seit dem Umbau ebenfalls ein Symbol neben dem
+      # Wort. Fehlt es, fällt MobileNav auf einen leeren Kreis zurück — das
+      # sieht aus wie ein Fehler und ist auch einer.
       - label: Anmeldung
         href: /anmelden/
         mobile: true
         icon: lucide:clipboard-pen
       - label: Ausschreibung
         href: /ausschreibung/
+        icon: lucide:file-text
       - label: Zeitplan
         href: /zeitplan/
         mobile: true
@@ -32,10 +38,13 @@ nav:
         icon: lucide:waves
       - label: Ergebnisse
         href: /ergebnisse/
+        icon: lucide:trophy
   - label: Fotos
     href: /fotos/
+    icon: lucide:image
   - label: Kontakt
     href: /kontakt/
+    icon: lucide:mail
 
 # Die beiden Wege, auf denen wir erreichbar sind. Facebook stand früher
 # daneben, ist aber bewusst nicht mehr dabei: Wer hier schreibt, soll eine

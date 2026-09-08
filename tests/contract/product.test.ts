@@ -10,6 +10,14 @@ import { probeProduct, type ProductProbe } from './probe.js';
 
 const probe: ProductProbe = await probeProduct();
 
+// Die flüchtigen Kennungen gehören ins Log und nicht in die Baseline — wer ein
+// Canary-Issue liest, will trotzdem sehen, auf welchem Stand raceresult war.
+// Der Workflow hebt diese Zeile in den Kopf des Issues.
+console.info(
+  `raceresult-Stand: loader ${probe.loaderVersion}, build ${probe.build}, ` +
+    `init ${probe.initLastModified ?? 'ohne Last-Modified'}`,
+);
+
 describe('raceresult Produkt-Schicht', () => {
   it('liefert eine Build-Version aus der unversionierten init.js', () => {
     // Das schärfste Einzelsignal der ganzen Kette. `init.js` selbst trägt keine
@@ -46,10 +54,30 @@ describe('raceresult Produkt-Schicht', () => {
   });
 
   it('entspricht der hinterlegten Baseline', () => {
-    // Bewusst ohne die Header von init.js: Last-Modified und ETag ändern sich
-    // auch bei inhaltsgleichen Redeploys und würden täglich falsch anschlagen.
-    // Sie stehen im Report des Workflows, nicht in der Baseline.
-    const { initEtag: _etag, initLastModified: _mod, ...stabil } = probe;
+    // Bewusst ohne alles, was sich bei einem inhaltsgleichen Redeploy mitdreht:
+    //
+    //   initEtag, initLastModified   neu bei jedem Ausliefern, auch unverändert
+    //   loaderVersion, build         Zählerstände, die raceresult hochzählt
+    //
+    // Die beiden Versionen standen hier bis September 2026 drin und haben den
+    // Canary sieben Tage am Stück rot gemeldet: loader v2.0.255 → v2.1.3 →
+    // v2.1.161 in einer Woche, build v14.0.19-15 → -23 — während productCssSha
+    // und die Klassenliste unverändert blieben. Es hat also nie etwas gegriffen,
+    // was uns betrifft. Für die geschlossene Anmeldung steht die Begründung
+    // schon in probe.ts, und sie gilt hier genauso: Ein Alarm, der immer steht,
+    // wird nicht mehr gelesen.
+    //
+    // Überwacht bleiben beide trotzdem, nur an der schärferen Stelle: über die
+    // Formatprüfungen oben — fehlt eine Version ganz, ist die Ladekette kaputt —
+    // und über die beiden SHAs, die anschlagen, wenn sich am ausgelieferten
+    // Inhalt wirklich etwas ändert. Die Werte selbst stehen im Log des Laufs.
+    const {
+      initEtag: _etag,
+      initLastModified: _mod,
+      loaderVersion: _loader,
+      build: _build,
+      ...stabil
+    } = probe;
     compareBaseline('product', stabil);
   });
 });

@@ -103,16 +103,34 @@ distances:
     price: 17
     price_youth: 13
 
+# Reihenfolge nach dem, was jemand VOR der Anmeldung wissen will — erst die
+# Fragen, die über das Ausfüllen entscheiden, dann die zum Wettkampftag.
+#
+# Jede Antwort deckt sich mit ausschreibung.md. Weicht dort etwas ab, ist die
+# Ausschreibung maßgeblich und diese Liste muss nachziehen: Sie steht im
+# Anmeldetrichter und wird als Zusage gelesen.
+#
+# Keine Frage zur Sammelanmeldung — die beantwortet die NoteBox aus `group`
+# direkt darüber auf derselben Seite. Zweimal derselbe Text liest sich wie ein
+# Versehen, und gepflegt würde am Ende nur eine der beiden Stellen.
 faq:
-  - q: Ist Neopren erlaubt?
-    a: Freigestellt — du entscheidest.
-  - q: Ab welchem Alter?
-    a: TODO vor Livegang klären — das Anmeldeformular sagt 12, die Preisstaffel und die Ausschreibung sagen 10. Unter 18 zusätzlich mit schriftlicher Einverständniserklärung der Erziehungsberechtigten; die wird mit der Meldebestätigung zugesandt.
-  - q: Können wir uns als Gruppe gemeinsam anmelden?
-    a: Ja. Im Anmeldeformular fügst du mit „+" weitere Personen hinzu — jede mit eigener Distanz, bezahlt wird einmal zusammen. Adresse, Mail und Telefon gelten dann für die ganze Buchung.
+  - q: Ab welchem Alter kann ich mitschwimmen?
+    a: Ab 10 Jahren, sofern Schwimmsporterfahrung vorliegt. Wer am Wettkampftag noch keine 18 ist, braucht zusätzlich eine schriftliche Einverständniserklärung der Erziehungsberechtigten — die wird mit der Meldebestätigung zugesandt.
+  - q: Wer bekommt den ermäßigten Preis?
+    a: Der ermäßigte Tarif gilt für den Jahrgang 2009 bis Geburtstag 29.08.2016 — also für alle, die am Wettkampftag zwischen 10 und 17 Jahre alt sind. Maßgeblich ist das Geburtsdatum, das du bei der Anmeldung angibst.
   - q: Was brauche ich für die Anmeldung?
     a: Adresse, Mail und Telefonnummer für die Buchung, dazu pro Person Name, Geburtsdatum, Geschlecht und die gewünschte Distanz. Ein Notfallkontakt ist optional, aber sinnvoll.
   - q: Kann ich nachmelden?
-    a: Ja, am Veranstaltungstag gegen 5 € Nachmeldegebühr.
+    a: Ja, am Veranstaltungstag gegen 5 € Nachmeldegebühr. Die Startunterlagenausgabe öffnet um 09:00 Uhr — plane genug Zeit vor deinem Start ein.
+  - q: Kann ich meine Anmeldung stornieren?
+    a: Das Startgeld wird nicht erstattet. Wer nicht an den Start geht, seine Nichtteilnahme vorher erklärt oder disqualifiziert wird, hat keinen Anspruch auf Rückzahlung.
+  - q: Ist ein Neoprenanzug erlaubt?
+    a: Freigestellt. Mit oder ohne ist beides zugelassen, eine getrennte Wertung gibt es nicht — du entscheidest nach Wassertemperatur und eigenem Gefühl.
   - q: Wie wird gewertet?
-    a: Nach DTU-Altersklassen, mit elektronischer Zeitmessung per Transponder.
+    a: Nach der DTU-Altersklasseneinteilung. Gemessen wird elektronisch per Transponder, dazu kommt eine Rundenkontrolle.
+  - q: Was passiert mit dem Transponder?
+    a: Den bekommst du mit den Startunterlagen und gibst ihn nach dem Zieleinlauf wieder ab. Für verlorene oder nicht zurückgegebene Transponder werden 90 € berechnet.
+  - q: Was ist, wenn das Wetter nicht mitspielt?
+    a: Bei Unwetter, Gewitter oder anderen unvorhersehbaren Gründen kann der Veranstalter den Wettkampf unterbrechen oder abbrechen.
+  - q: Muss ich mir wegen Zerkarien Sorgen machen?
+    a: Zerkarien kommen in allen natürlichen Gewässern vor und sind kein Zeichen schlechter Wasserqualität — der Mensch ist als Wirt nicht geeignet. Ein Befall der Haut kann trotzdem Juckreiz auslösen. Vorbeugen kannst du mit einer dicken Schicht wasserfester Sonnencreme oder Vaseline sowie gründlichem Duschen und Abtrocknen danach. Ausführlich steht das in der Ausschreibung.

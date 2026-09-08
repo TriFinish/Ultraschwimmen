@@ -2,16 +2,23 @@
 //
 // Die Ladekette hat vier Stufen, und die dritte ist unversioniert:
 //
-//   my.raceresult.com/RRRegStart/load.js.php      v2.0.221 (hartkodiert)
-//     └─ RRRegStart.js?v=v2.0.221                 äußere Hülle
+//   my.raceresult.com/RRRegStart/load.js.php      v=… (Zählerstand)
+//     └─ RRRegStart.js?v=…                        äußere Hülle
 //          └─ events2.../registrations/init.js    ⚠ UNVERSIONIERT
-//               ├─ registration.css?build=v14.0.19-10   erzeugt unsere Klassen
-//               └─ registration.js ?build=v14.0.19-10   erzeugt unser Markup
+//               ├─ registration.css?build=…       erzeugt unsere Klassen
+//               └─ registration.js ?build=…       erzeugt unser Markup
 //
 // Überwacht werden muss die letzte Stufe: Dort entsteht das Markup, in das
 // `src/scripts/widget.ts` greift. `init.js` ist das Scharnier dorthin und kann
 // sich ohne Vorwarnung ändern — sie trug beim Anlegen dieses Tests einen
 // Last-Modified-Zeitstempel von wenigen Stunden.
+//
+// Die beiden Versionsnummern sind dabei ausdrücklich KEIN Vertrag. raceresult
+// zählt sie mehrmals pro Woche hoch, ohne dass sich am ausgelieferten Inhalt
+// etwas ändert (beobachtet: loader v2.0.255 → v2.1.161 und build v14.0.19-15
+// → -23 binnen einer Woche bei gleichbleibendem CSS). Sie werden deshalb
+// gemessen und protokolliert, aber nicht gegen die Baseline gehalten — siehe
+// product.test.ts.
 
 import { createHash } from 'node:crypto';
 

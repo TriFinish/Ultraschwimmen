@@ -29,6 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       layer: ${{ steps.run.outputs.layer }}
+      stand: ${{ steps.run.outputs.stand }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -44,6 +45,14 @@ jobs:
           npm run test:contract 2>&1 | tee canary.log
           code=${PIPESTATUS[0]}
           set -e
+
+          # Der beobachtete Stand bei raceresult. Loader- und Build-Version
+          # stehen bewusst nicht mehr in der Baseline — sie zählen mehrmals pro
+          # Woche hoch, ohne dass sich am Inhalt etwas ändert (siehe
+          # tests/contract/product.test.ts). Sichtbar bleiben sollen sie
+          # trotzdem, also wandern sie in den Kopf des Issues statt in einen
+          # täglichen Fehlalarm.
+          echo "stand=$(grep -m1 'raceresult-Stand:' canary.log || true)" >> "$GITHUB_OUTPUT"
 
           if [ "$code" -eq 0 ]; then
             exit 0
@@ -93,6 +102,7 @@ jobs:
         env:
           RESULT: ${{ needs.contract.result }}
           LAYER: ${{ needs.contract.outputs.layer }}
+          STAND: ${{ needs.contract.outputs.stand }}
         with:
           script: |
             const fs = require('fs');
@@ -135,7 +145,10 @@ jobs:
 
             const body = [
               erklaerung, '',
-              `Lauf: [${context.runId}](${runUrl})`, '',
+              `Lauf: [${context.runId}](${runUrl})`,
+              // Ganz oben, weil das Log unten auf die letzten 6000 Zeichen
+              // gekürzt wird und diese Zeile sonst wegfiele.
+              process.env.STAND ? `\n${process.env.STAND}` : '', '',
               '<details><summary>Testausgabe</summary>', '',
               '```', log || '(kein Log)', '```', '',
               '</details>',

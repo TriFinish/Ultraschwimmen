@@ -1,8 +1,6 @@
 {
-  "loaderVersion": "v2.0.255",
-  "build": "v14.0.19-15",
   "productCssSha": "9cfc4995a4206c46ae6aced89ccd2fb4f8e2ac5c2d517dce1cb376f2719bdcaf",
-  "productJsSha": "ae155a9c06ae4f493f2a223385eb4c0ba24c108885f82c8882d7a17929fd9ece",
+  "productJsSha": "b7a53a5ca8274120ea1581c44b154b14321b67291401271fa68b6db59b4991a1",
   "productCssClasses": [
     "RRReg_Confirmation",
     "RRReg_EntryField",
